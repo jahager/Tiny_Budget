@@ -166,7 +166,6 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 },
               ),
             ),
-            const Spacer(),
             Padding(
                 padding: const EdgeInsets.only(top:42, bottom: 16),
                 child: OutlinedButton(

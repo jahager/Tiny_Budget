@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiny_budget/add_entry_page.dart';
 import 'package:tiny_budget/view_entries_page.dart';
+import 'package:tiny_budget/view_summary_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -85,8 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                     },
                         child: const Text("View Entries",
-                            style: TextStyle(fontSize: 42))),
-                  )),
+                            style: TextStyle(fontSize: 42)
+                        )
+                    ),
+                  )
+              ),
               const Spacer(),
               Expanded(
                   flex: 3,
@@ -94,11 +98,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(3.0),
                     child: OutlinedButton(
                         style: roundSquareStyle,
-                        onPressed: () => {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ViewSummaryPage())
+                          );
+                          },
                         child: const Text("View Summary",
                             style: TextStyle(fontSize: 42))),
                   )
-
               ),
               const Spacer(),
             ],
