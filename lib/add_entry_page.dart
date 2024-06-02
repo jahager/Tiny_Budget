@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'entry_db.dart';
+
 class AddEntryPage extends StatefulWidget {
   const AddEntryPage({super.key});
 
@@ -34,7 +36,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
     super.dispose();
   }
 
-  void _getText() {
+
+  Future<void> _getText() async {
     if (kDebugMode) {
       print("Date " + dateController.text);
       print("Paid to " + payToController.text);
@@ -43,6 +46,22 @@ class _AddEntryPageState extends State<AddEntryPage> {
       print("Amount " + amountController.text);
       String payType = _entryType == EntryType.payment ? "payment" : "income";
       print("Is " + payType);
+
+      Map<String, dynamic> entryJson = {
+        'date': '2023-04-01T12:00:00.000Z',
+        'paidTo': 'John Doe',
+        'category': 'Groceries',
+        'notes': 'Bought groceries for the week',
+        'amount': 100.0,
+      };
+
+      Entry entry = Entry.fromJson(entryJson);
+
+      await LocalDatabase.saveEntries([entry]);
+
+      var entries = await LocalDatabase.recallEntries();
+      print(entries);
+
     }
 
   }
