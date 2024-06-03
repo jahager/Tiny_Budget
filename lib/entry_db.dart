@@ -2,31 +2,41 @@ import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class Entry{
+class Entry {
   int id;
   DateTime date;
   String paidTo;
   String category;
   String notes;
   double amount;
+  bool type;
 
-  Entry(this.date, this.paidTo, this.category, this.notes, this.amount, [this.id=0]);
+  Entry(
+      this.date, this.paidTo, this.category, this.notes, this.amount, this.type,
+      [this.id = 0]);
 
   @override
-  String toString(){
+  String toString() {
     return "${this.id}, ${DateFormat('yyyy-MM-dd').format(this.date)} ${this.paidTo} ${this.category} ${this.amount}";
   }
 
-
   factory Entry.fromJson(Map<String, dynamic> json) {
+    bool type;
+    if (json['type'].runtimeType == int) {
+      // Convert the integer to a boolean
+      type = json['type'] == 1;
+    } else {
+      // Cast the value to a boolean
+      type = json['type'] as bool;
+    }
     return Entry(
-      DateTime.parse(json['date']),
-      json['paidTo'] as String,
-      json['category'] as String,
-      json['notes'] as String,
-      json['amount'] as double,
-        json['id'] as int
-    );
+        DateTime.parse(json['date']),
+        json['paidTo'] as String,
+        json['category'] as String,
+        json['notes'] as String,
+        json['amount'] as double,
+        type,
+        json['id'] as int);
   }
 
   Map<String, dynamic> toJson() {
@@ -36,12 +46,11 @@ class Entry{
       'category': category,
       'notes': notes,
       'amount': amount,
-      'id' : id
+      'type': type,
+      'id': id
     };
   }
 }
-
-
 
 class LocalDatabase {
   // Database name
@@ -69,7 +78,8 @@ class LocalDatabase {
             paidTo TEXT,
             category TEXT,
             notes TEXT,
-            amount REAL
+            amount REAL,
+            type BOOL
           )
         ''');
       },
@@ -88,7 +98,7 @@ class LocalDatabase {
     for (Entry entry in entries) {
       await database.insert(
         entriesTable,
-        entry.toJson(),
+        entry.toJson()..remove("id"),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
@@ -103,10 +113,19 @@ class LocalDatabase {
     List<Map<String, dynamic>> entriesJson = await database.query(entriesTable);
 
     // Convert the JSON maps to Entry objects
-    List<Entry> entries = entriesJson.map((entryJson) => Entry.fromJson(entryJson)).toList();
+    List<Entry> entries =
+        entriesJson.map((entryJson) => Entry.fromJson(entryJson)).toList();
 
     // Return the list of entries
     return entries;
   }
-}
 
+  static Future<void> deleteEntry(Entry entry) async {
+    final db = await initializeDatabase();
+    await db.delete(
+      'entries',
+      where: 'id = ?',
+      whereArgs: [entry.id],
+    );
+  }
+}

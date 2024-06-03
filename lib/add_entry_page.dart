@@ -36,34 +36,27 @@ class _AddEntryPageState extends State<AddEntryPage> {
     super.dispose();
   }
 
-
   Future<void> _getText() async {
-    if (kDebugMode) {
-      print("Date " + dateController.text);
-      print("Paid to " + payToController.text);
-      print("Category " + categoryController.text);
-      print("Notes " + notesController.text);
-      print("Amount " + amountController.text);
-      String payType = _entryType == EntryType.payment ? "payment" : "income";
-      print("Is " + payType);
+    print("Date " + dateController.text);
+    print("Paid to " + payToController.text);
+    print("Category " + categoryController.text);
+    print("Notes " + notesController.text);
+    print("Amount " + amountController.text);
+    String payType = _entryType == EntryType.payment ? "payment" : "income";
+    print("Is " + payType);
 
-      Map<String, dynamic> entryJson = {
-        'date': '2023-04-01T12:00:00.000Z',
-        'paidTo': 'John Doe',
-        'category': 'Groceries',
-        'notes': 'Bought groceries for the week',
-        'amount': 100.0,
-      };
+    Entry entry = Entry(
+        DateTime.parse(dateController.text),
+        payToController.text,
+        categoryController.text,
+        notesController.text,
+        double.parse(amountController.text),
+        _entryType == EntryType.payment);
 
-      Entry entry = Entry.fromJson(entryJson);
+    await LocalDatabase.saveEntries([entry]);
 
-      await LocalDatabase.saveEntries([entry]);
-
-      var entries = await LocalDatabase.recallEntries();
-      print(entries);
-
-    }
-
+    var entries = await LocalDatabase.recallEntries();
+    print(entries);
   }
 
   final ButtonStyle roundSquareStyle = OutlinedButton.styleFrom(
@@ -186,10 +179,12 @@ class _AddEntryPageState extends State<AddEntryPage> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(top:42, bottom: 16),
+                padding: const EdgeInsets.only(top: 42, bottom: 16),
                 child: OutlinedButton(
                     style: roundSquareStyle,
-                    onPressed: () {_getText();},
+                    onPressed: () {
+                      _getText();
+                    },
                     child:
                         const Text("Submit", style: TextStyle(fontSize: 32)))),
           ],
