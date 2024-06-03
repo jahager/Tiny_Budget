@@ -36,7 +36,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
     super.dispose();
   }
 
-  Future<void> _getText() async {
+  Future<void> _submitText() async {
     print("Date " + dateController.text);
     print("Paid to " + payToController.text);
     print("Category " + categoryController.text);
@@ -99,6 +99,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 if (pickedDate != null) {
                   setState(() {
                     selectedDate = pickedDate;
+                    dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
                   });
                 }
               },
@@ -183,7 +184,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 child: OutlinedButton(
                     style: roundSquareStyle,
                     onPressed: () {
-                      _getText();
+                      _submitText();
+                      Navigator.pop(context);
                     },
                     child:
                         const Text("Submit", style: TextStyle(fontSize: 32)))),
