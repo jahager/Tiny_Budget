@@ -81,7 +81,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height - 200,
                     child: FutureBuilder(
-                      future: LocalDatabase.recallEntries(),
+                      future: LocalDatabase.getEntriesByDateRange(selectedDateRange.start, selectedDateRange.end),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final entries = snapshot.data!;
