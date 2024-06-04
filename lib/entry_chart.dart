@@ -76,7 +76,8 @@ class CategoryLegend extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(color: Theme.of(context).colorScheme.primary,
+              width: 2),
           borderRadius: BorderRadius.circular(16.0)
       ),
       child: Padding(
