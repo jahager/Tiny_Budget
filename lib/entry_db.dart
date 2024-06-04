@@ -15,6 +15,14 @@ class Entry {
       this.date, this.paidTo, this.category, this.notes, this.amount, this.type,
       [this.id = 0]);
 
+  String getDate() {
+    return DateFormat('yyyy-MM-dd').format(this.date).toString();
+  }
+
+  String getType() {
+    return this.type ? "Payment" : "Income";
+  }
+
   @override
   String toString() {
     return "${DateFormat('yyyy-MM-dd').format(this.date)}, To:${this.paidTo}, Cat:${this.category}, \$${this.amount}";
