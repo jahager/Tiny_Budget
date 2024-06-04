@@ -92,7 +92,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                 ),
               ],
             ),
-            SizedBox( height: 8,),
+            SizedBox( height: 16,),
             Flexible(
                 fit: FlexFit.loose,
                 child: FutureBuilder<List<Entry>>(
@@ -108,7 +108,8 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                             entries: snapshot.data!,
                           ),
                         ),
-                        Text("Hello listview")
+                        SizedBox( height: 16,),
+                        CategoryLegend(entries: snapshot.data!)
                       ]);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
