@@ -17,7 +17,7 @@ class Entry {
 
   @override
   String toString() {
-    return "${this.id}, ${DateFormat('yyyy-MM-dd').format(this.date)} ${this.paidTo} ${this.category} ${this.amount}";
+    return "${DateFormat('yyyy-MM-dd').format(this.date)}, To:${this.paidTo}, Cat:${this.category}, \$${this.amount}";
   }
 
   factory Entry.fromJson(Map<String, dynamic> json) {
@@ -120,7 +120,8 @@ class LocalDatabase {
     return entries;
   }
 
-  static Future<List<Entry>> getEntriesByDateRange(DateTime startDate, DateTime endDate) async {
+  static Future<List<Entry>> getEntriesByDateRange(
+      DateTime startDate, DateTime endDate) async {
     // Get the database
     Database database = await initializeDatabase();
 
@@ -132,7 +133,8 @@ class LocalDatabase {
     );
 
     // Convert the entries to Entry objects
-    List<Entry> entryList = entries.map((entry) => Entry.fromJson(entry)).toList();
+    List<Entry> entryList =
+        entries.map((entry) => Entry.fromJson(entry)).toList();
 
     // Return the list of entries
     return entryList;

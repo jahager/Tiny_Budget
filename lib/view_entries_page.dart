@@ -72,48 +72,98 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                 },
               ),
             ),
+            SizedBox(
+              height: 16,
+            ),
             Container(
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
               width: double.infinity,
               height: MediaQuery.of(context).size.height - 200,
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height - 200,
-                    child: FutureBuilder(
-                      future: LocalDatabase.getEntriesByDateRange(selectedDateRange.start, selectedDateRange.end),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final entries = snapshot.data!;
-                          return ListView(
-                            children: entries
-                                .map((entry) => Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(entry.toString()),
-                                        IconButton(
-                                            onPressed: () {
-                                              LocalDatabase.deleteEntry(entry);
-                                              setState(() {});
-                                            },
-                                            icon: Icon(Icons.delete))
-                                      ],
-                                    ))
-                                .toList(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      },
-                    ),
-                  );
-                },
-                itemCount: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height - 200,
+                      child: FutureBuilder(
+                        future: LocalDatabase.getEntriesByDateRange(
+                            selectedDateRange.start, selectedDateRange.end),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final entries = snapshot.data!;
+                            // HERE IS THE ACTUAL LIST OF ENTRIES DISPLAYED
+                            return ListView(
+                              children: entries
+                                  .map((entry) => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(entry.toString()),
+                                          Spacer(),
+                                          IconButton(
+                                              onPressed: () {
+                                                Widget okButton =
+                                                    OutlinedButton(
+                                                  child: Text("Delete"),
+                                                  onPressed: () {
+                                                    LocalDatabase.deleteEntry(
+                                                        entry);
+                                                    setState(() {});
+                                                    Navigator.pop(context);
+                                                    // Handle OK button press the dialog with a value (true for OK)
+                                                  },
+                                                );
+
+                                                Widget cancelButton =
+                                                    OutlinedButton(
+                                                  child: Text("Cancel"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    // Handle Cancel button press // Close the dialog with a value (false for Cancel)
+                                                  },
+                                                );
+
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                          "Confirm Delete:"),
+                                                      content: Text(
+                                                          entry.toString()),
+                                                      actions: [
+                                                        okButton,
+                                                        cancelButton,
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+
+                                                //
+                                              },
+                                              icon: Icon(Icons.delete))
+                                        ],
+                                      ))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                  itemCount: 1,
+                ),
               ),
             )
           ],
