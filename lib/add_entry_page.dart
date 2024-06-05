@@ -121,14 +121,31 @@ class _AddEntryPageState extends State<AddEntryPage> {
             const SizedBox(
               height: spaceBetweenInput,
             ),
-            TextField(
-              controller: categoryController,
-              decoration: InputDecoration(
-                labelText: "Category",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-              ),
+            FutureBuilder<Set<String>>(
+              future: LocalDatabase.getCategories(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return TextField(
+                    controller: categoryController,
+                    decoration: InputDecoration(
+                      labelText: "Category",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                  );
+                } else {
+                  return TextField(
+                    controller: categoryController,
+                    decoration: InputDecoration(
+                      labelText: "Category",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(
               height: spaceBetweenInput,
@@ -147,8 +164,11 @@ class _AddEntryPageState extends State<AddEntryPage> {
             ),
             TextField(
               controller: amountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
+              inputFormatters: [DollarTextInputFormatter()],
               decoration: InputDecoration(
                 labelText: "\$ Amount",
+                prefixText: "\$",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
@@ -159,6 +179,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             ),
             ListTile(
               title: const Text('Payment'),
+              horizontalTitleGap: 0,
               leading: Radio<EntryType>(
                 value: EntryType.payment,
                 groupValue: _entryType,
@@ -171,6 +192,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             ),
             ListTile(
               title: const Text('Income'),
+              horizontalTitleGap: 0,
               leading: Radio<EntryType>(
                 value: EntryType.income,
                 groupValue: _entryType,

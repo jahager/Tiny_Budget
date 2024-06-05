@@ -128,6 +128,28 @@ class LocalDatabase {
     return entries;
   }
 
+  // Get set of Categories
+  static Future<Set<String>> getCategories() async{
+    List<Entry> entries = await recallEntries();
+
+    Set<String> categories = {};
+    for (Entry entry in entries) {
+      categories.add(entry.category);
+    }
+    print(categories);
+    return categories;
+  }
+
+  static Future<Set<String>> getPaidTo() async{
+    List<Entry> entries = await recallEntries();
+
+    Set<String> categories = {};
+    for (Entry entry in entries) {
+      categories.add(entry.paidTo);
+    }
+    return categories;
+  }
+
   static Future<List<Entry>> getEntriesByDateRange(
       DateTime startDate, DateTime endDate) async {
     // Get the database
