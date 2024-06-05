@@ -78,18 +78,6 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: IntrinsicHeight(
-                    child: OutlinedButton(
-                        style: roundSquareStyle,
-                        onPressed: () {
-                          _updateData();
-                        },
-                        child:
-                            const Text("Get", style: TextStyle(fontSize: 16))),
-                  ),
-                ),
               ],
             ),
             SizedBox( height: 16,),

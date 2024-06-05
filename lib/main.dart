@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiny_budget/add_entry_page.dart';
+import 'package:tiny_budget/budget_theme.dart';
 import 'package:tiny_budget/view_entries_page.dart';
 import 'package:tiny_budget/view_summary_page.dart';
 
@@ -37,21 +38,51 @@ class _MyHomePageState extends State<MyHomePage> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16))));
 
+
   @override
   Widget build(BuildContext context) {
+    final Gradient gradient;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         title: Center(
+            child: Stack(children: [
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 48,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 6
+                ..color = Colors.black,
+            ),
+          ),
+          ShaderMask(
+            blendMode: BlendMode.srcIn,
+            shaderCallback: (bounds) => LinearGradient(colors: [
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.inversePrimary,
+            ]).createShader(
+            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+          ),
             child: Text(
-          widget.title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        )),
+              widget.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 48,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ])),
       ),
       body: Center(
         // 3 Buttons Add Entry, View Entries, View Summary
         child: Padding(
-          padding: const EdgeInsets.only(top: 3, bottom: 20, left: 16, right: 16),
+          padding:
+              const EdgeInsets.only(top: 3, bottom: 20, left: 16, right: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,31 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const AddEntryPage())
-                          );
+                              MaterialPageRoute(
+                                  builder: (context) => const AddEntryPage()));
                         },
-                        child: const Text("Add Entry",
-                            style: TextStyle(fontSize: 42)))),
-              ),
-              const Spacer(),
-              Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: OutlinedButton(
-                        style: roundSquareStyle,
-                        onPressed: () {
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ViewEntriesPage())
-                        );
-                    },
-                        child: const Text("View Entries",
-                            style: TextStyle(fontSize: 42)
-                        )
+                        child: const OutlineText("Add Entry")
                     ),
-                  )
-              ),
+                    )
+                ),
               const Spacer(),
               Expanded(
                   flex: 3,
@@ -101,13 +114,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ViewSummaryPage())
-                          );
-                          },
-                        child: const Text("View Summary",
-                            style: TextStyle(fontSize: 42))),
-                  )
-              ),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewEntriesPage()));
+                        },
+                        child: const OutlineText("View Entries",)),
+                  )),
+              const Spacer(),
+              Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: OutlinedButton(
+                        style: roundSquareStyle,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewSummaryPage()));
+                        },
+                        child: const OutlineText("View Summary",)),
+                  )),
               const Spacer(),
             ],
           ),

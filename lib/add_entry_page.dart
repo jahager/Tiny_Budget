@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'budget_theme.dart';
 import 'entry_db.dart';
 
 class AddEntryPage extends StatefulWidget {
@@ -99,7 +100,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 if (pickedDate != null) {
                   setState(() {
                     selectedDate = pickedDate;
-                    dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+                    dateController.text =
+                        DateFormat('yyyy-MM-dd').format(selectedDate);
                   });
                 }
               },
@@ -188,7 +190,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
                       Navigator.pop(context);
                     },
                     child:
-                        const Text("Submit", style: TextStyle(fontSize: 32)))),
+                        const OutlineText("Submit", ))),
           ],
         ),
       )),
