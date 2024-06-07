@@ -29,20 +29,25 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
     super.dispose();
   }
 
+  bool sortAscending = true;
+  int sortColumnIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         title: const OutlineText(
-          "Budget Items", withGradient: true, fontSize: 32,
+          "Budget Items",
+          withGradient: true,
+          fontSize: 32,
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 50,
               child: TextField(
                 decoration: InputDecoration(
@@ -77,9 +82,8 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
             ),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).colorScheme.primary,
-                  width: 2
-                ),
+                border: Border.all(
+                    color: Theme.of(context).colorScheme.primary, width: 2),
                 borderRadius: BorderRadius.circular(16.0),
               ),
               width: double.infinity,
@@ -90,43 +94,141 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height - 200,
                     child: FutureBuilder<List<Entry>>(
-                      future: LocalDatabase.getEntriesByDateRange(selectedDateRange.start, selectedDateRange.end),
+                      future: LocalDatabase.getEntriesByDateRange(
+                          selectedDateRange.start, selectedDateRange.end),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          switch (sortColumnIndex) {
+                            case 1:
+                              if (sortAscending) {
+                                snapshot.data!
+                                    .sort((a, b) => a.date.compareTo(b.date));
+                              } else {
+                                snapshot.data!
+                                    .sort((b, a) => a.date.compareTo(b.date));
+                              }
+                              break;
+                            case 2:
+                              if (sortAscending) {
+                                snapshot.data!.sort(
+                                    (a, b) => a.amount.compareTo(b.amount));
+                              } else {
+                                snapshot.data!.sort(
+                                    (b, a) => a.amount.compareTo(b.amount));
+                              }
+                              break;
+                            case 3:
+                              if (sortAscending) {
+                                snapshot.data!.sort(
+                                    (a, b) => a.paidTo.compareTo(b.paidTo));
+                              } else {
+                                snapshot.data!.sort(
+                                    (b, a) => a.paidTo.compareTo(b.paidTo));
+                              }
+                              break;
+                            case 4:
+                              if (sortAscending) {
+                                snapshot.data!.sort(
+                                    (a, b) => a.category.compareTo(b.category));
+                              } else {
+                                snapshot.data!.sort(
+                                    (b, a) => a.category.compareTo(b.category));
+                              }
+                              break;
+                            case 5:
+                              if (sortAscending) {
+                                snapshot.data!
+                                    .sort((a, b) => a.notes.compareTo(b.notes));
+                              } else {
+                                snapshot.data!
+                                    .sort((b, a) => a.notes.compareTo(b.notes));
+                              }
+                              break;
+                            case 6:
+                              if (sortAscending) {
+                                snapshot.data!.sort((a, b) => a.type ? 1 : -1);
+                              } else {
+                                snapshot.data!.sort((a, b) => a.type ? -1 : 1);
+                              }
+                              break;
+                          }
+
                           List<Entry> entries = snapshot.data!;
-                          return SingleChildScrollView( // To make table scrollable if needed
+                          return SingleChildScrollView(
+                            // To make table scrollable if needed
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
+                              sortAscending: sortAscending,
+                              sortColumnIndex: sortColumnIndex,
                               horizontalMargin: 8.0,
                               columnSpacing: 8.0,
-                              columns: const [
-                                DataColumn(label: Text("Delete")),
-                                DataColumn(label: Text('Date')),
-                                DataColumn(label: Text('Amount')),
-                                DataColumn(label: Text('Paid To')),
-                                DataColumn(label: Text('Category')),
-                                DataColumn(label: Text('Notes')),
-                                DataColumn(label: Text('Type')),
+                              columns: [
+                                const DataColumn(label: Text("Delete")),
+                                DataColumn(
+                                    label: const Text('Date'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 1;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
+                                DataColumn(
+                                    label: const Text('Amount'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 2;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
+                                DataColumn(
+                                    label: const Text('Paid To'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 3;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
+                                DataColumn(
+                                    label: const Text('Category'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 4;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
+                                DataColumn(
+                                    label: const Text('Notes'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 5;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
+                                DataColumn(
+                                    label: const Text('Type'),
+                                    onSort: (colIndex, ascending) {
+                                      setState(() {
+                                        sortColumnIndex = 6;
+                                        sortAscending = !sortAscending;
+                                      });
+                                    }),
                               ],
                               rows: entries.map((entry) {
                                 return DataRow(cells: [
                                   DataCell(IconButton(
                                       onPressed: () {
-                                        Widget okButton =
-                                        OutlinedButton(
-                                          child: Text("Delete"),
+                                        Widget okButton = OutlinedButton(
+                                          child: const Text("Delete"),
                                           onPressed: () {
-                                            LocalDatabase.deleteEntry(
-                                                entry);
+                                            LocalDatabase.deleteEntry(entry);
                                             setState(() {});
                                             Navigator.pop(context);
                                             // Handle OK button press the dialog with a value (true for OK)
                                           },
                                         );
 
-                                        Widget cancelButton =
-                                        OutlinedButton(
-                                          child: Text("Cancel"),
+                                        Widget cancelButton = OutlinedButton(
+                                          child: const Text("Cancel"),
                                           onPressed: () {
                                             Navigator.pop(context);
                                             // Handle Cancel button press // Close the dialog with a value (false for Cancel)
@@ -135,13 +237,11 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
 
                                         showDialog(
                                           context: context,
-                                          builder:
-                                              (BuildContext context) {
+                                          builder: (BuildContext context) {
                                             return AlertDialog(
-                                              title: Text(
-                                                  "Confirm Delete:"),
-                                              content: Text(
-                                                  entry.toString()),
+                                              title:
+                                                  const Text("Confirm Delete:"),
+                                              content: Text(entry.toString()),
                                               actions: [
                                                 okButton,
                                                 cancelButton,
@@ -152,9 +252,10 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
 
                                         //
                                       },
-                                      icon: Icon(Icons.delete))),
+                                      icon: const Icon(Icons.delete))),
                                   DataCell(Text(entry.getDate())),
-                                  DataCell(Text("\$${entry.amount.toStringAsFixed(2)}")),
+                                  DataCell(Text(
+                                      "\$${entry.amount.toStringAsFixed(2)}")),
                                   DataCell(Text(entry.paidTo)),
                                   DataCell(Text(entry.category)),
                                   DataCell(Text(entry.notes)),
