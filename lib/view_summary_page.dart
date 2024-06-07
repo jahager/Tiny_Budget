@@ -1,9 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tiny_budget/entry_chart.dart';
 
 import 'budget_theme.dart';
 import 'entry_db.dart';
+import 'line_chart.dart';
 
 class ViewSummaryPage extends StatefulWidget {
   const ViewSummaryPage({super.key});
@@ -41,9 +43,8 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
-          title: const Text(
-            "View Summary",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          title: const OutlineText(
+            "Budget Summary", withGradient: true, fontSize: 32,
           ),
         ),
         body: Padding(
@@ -80,15 +81,17 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                 ),
               ],
             ),
-            SizedBox( height: 16,),
-            Flexible(
-                fit: FlexFit.loose,
-                child: FutureBuilder<List<Entry>>(
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 170,
+              width: double.infinity,
+              child: ListView(children: [
+                Center(child: OutlineText("Spending", withGradient: true)),
+                FutureBuilder<List<Entry>>(
                   future: LocalDatabase.getEntriesByDateRange(
                       selectedDateRange.start, selectedDateRange.end),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return ListView(children: [
+                      return Column(children: [
                         SizedBox(
                           height: 200,
                           width: 200,
@@ -96,7 +99,9 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                             entries: snapshot.data!,
                           ),
                         ),
-                        SizedBox( height: 16,),
+                        SizedBox(
+                          height: 16,
+                        ),
                         CategoryLegend(entries: snapshot.data!)
                       ]);
                     } else if (snapshot.hasError) {
@@ -105,7 +110,48 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                       return CircularProgressIndicator();
                     }
                   },
+                ),
+                Center(
+                    child: OutlineText(
+                  "Budgets",
+                  withGradient: true,
                 )),
+                FutureBuilder<Set<String>>(
+                    future: LocalDatabase.getCategories(),
+                    builder: (context, categories) {
+                      if (categories.hasData) {
+                        List<Widget> graphs =[];
+
+                        for (String category in categories.data!){
+                          graphs.add(Row(
+                            children: [
+                              OutlineText(category, fontSize: 24,),
+                            ],
+                          ));
+                          graphs.add(FutureBuilder<List<Entry>>(
+                              future: LocalDatabase.recallEntries(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return LineChartCatEntries(
+                                    entries: snapshot.data!,
+                                    dateRange: selectedDateRange,
+                                    category: category,
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              })
+                          );
+                        }
+                        return Column(
+                          children: graphs,
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    }),
+              ]),
+            ),
           ]),
         ));
   }

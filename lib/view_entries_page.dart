@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'budget_theme.dart';
 import 'entry_db.dart';
 
 class ViewEntriesPage extends StatefulWidget {
@@ -33,9 +34,8 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
-        title: const Text(
-          "View Entries",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: const OutlineText(
+          "Budget Items", withGradient: true, fontSize: 32,
         ),
       ),
       body: Padding(

@@ -19,8 +19,12 @@ class Entry {
     return DateFormat('yyyy-MM-dd').format(this.date).toString();
   }
 
+  int getDateAsInt() {
+      return date.millisecondsSinceEpoch;
+  }
+
   String getType() {
-    return this.type ? "Payment" : "Income";
+    return this.type ? "Payment" : "Budget";
   }
 
   @override

@@ -71,9 +71,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
-        title: const Text(
-          "Add Entry",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: const OutlineText(
+          "Add Budget/Pay", withGradient: true, fontSize: 32,
         ),
       ),
       body: Center(
@@ -191,7 +190,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
               ),
             ),
             ListTile(
-              title: const Text('Income'),
+              title: const Text('Budget'),
               horizontalTitleGap: 0,
               leading: Radio<EntryType>(
                 value: EntryType.income,

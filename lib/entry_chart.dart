@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import 'budget_theme.dart';
 import 'entry_db.dart';
 
 class PieChartByCategory extends StatelessWidget {
@@ -17,22 +18,30 @@ class PieChartByCategory extends StatelessWidget {
         categoryAmounts[entry.category] = 0.0;
       }
 
-      categoryAmounts[entry.category] = sum(entry.amount, categoryAmounts[entry.category]);
+      if (entry.type) {
+        categoryAmounts[entry.category] =
+            sum(entry.amount, categoryAmounts[entry.category]);
+      }
     }
+
+    final totalSpend = categoryAmounts.values.toList().reduce((a, b) => a + b);
 
     // Create a list of PieChartSectionData objects
     List<PieChartSectionData> pieChartSections = [];
     for (String category in categoryAmounts.keys) {
       pieChartSections.add(
         PieChartSectionData(
-          value: categoryAmounts[category],
-          color: Colors.primaries[(categoryAmounts.keys.toList().indexOf(category) % Colors.primaries.length)],
-          radius: 100,
-          title: "${category.toString()}: ${categoryAmounts[category]}",
-          titleStyle: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-
-          showTitle: true
-        ),
+            value: categoryAmounts[category],
+            color: getComplementaryColors(
+                Theme.of(context).colorScheme.primary,
+                categoryAmounts
+                    .length)[categoryAmounts.keys.toList().indexOf(category)],
+            radius: 100,
+            title:
+                "${(categoryAmounts[category]! / totalSpend * 100).toInt()}% ${category.toString()}",
+            titlePositionPercentageOffset: 0.75,
+            titleStyle: const TextStyle(color: Colors.black, fontSize: 16),
+            showTitle: true),
       );
     }
 
@@ -42,7 +51,6 @@ class PieChartByCategory extends StatelessWidget {
         sections: pieChartSections,
         centerSpaceRadius: 2,
       ),
-
     );
   }
 }
@@ -51,46 +59,71 @@ class CategoryLegend extends StatelessWidget {
   final List<Entry> entries;
 
   const CategoryLegend({Key? key, required this.entries}) : super(key: key);
-
-  Row _buildRow(String key, double value) {
+  Row _buildRow(String key, double value, Color color) {
     return Row(
       children: [
-        Text(key, style: TextStyle(fontSize: 32),),
+        OutlineText(
+          key,
+          fontSize: 32,
+          color: [color],
+          outlineWidth: 2.5,
+        ),
         Spacer(),
-        Text("\$ ${value.toStringAsFixed(2)}", style: TextStyle(fontSize: 32),), // Convert double value to string
+        OutlineText("\$ ${value.toStringAsFixed(2)}",
+            fontSize: 32,
+            color: [color],
+            outlineWidth: 2.5), // Convert double value to string
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     Map<String, double> categoryAmounts = {};
     for (Entry entry in entries) {
       if (!categoryAmounts.containsKey(entry.category)) {
         categoryAmounts[entry.category] = 0.0;
       }
 
-      categoryAmounts[entry.category] = sum(entry.amount, categoryAmounts[entry.category]);
+      if (entry.type) {
+        categoryAmounts[entry.category] =
+            sum(entry.amount, categoryAmounts[entry.category]);
+      }
     }
 
     return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).colorScheme.primary,
-              width: 2),
-          borderRadius: BorderRadius.circular(16.0)
-      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-            children: categoryAmounts.entries.map((entry) => _buildRow(entry.key, entry.value)).toList(),
+          children: categoryAmounts.entries
+              .map((entry) => _buildRow(
+                  entry.key,
+                  entry.value,
+                  getComplementaryColors(Theme.of(context).colorScheme.primary,
+                          categoryAmounts.length)[
+                      categoryAmounts.keys.toList().indexOf(entry.key)]))
+              .toList(),
         ),
       ),
     );
   }
 }
 
-
 double sum(a, b) {
   return a + b;
+}
+
+List<Color> getComplementaryColors(Color color, int count) {
+  HSVColor hsvColor = HSVColor.fromColor(color);
+
+  List<Color> colors = [];
+  colors.add(hsvColor.toColor());
+
+  for (int i = 1; i < count; i++) {
+    double complementaryHue = (hsvColor.hue + 180 ~/ (count - 1)) % 360;
+    hsvColor = HSVColor.fromAHSV(hsvColor.alpha, complementaryHue,
+        hsvColor.saturation, hsvColor.saturation);
+    colors.add(hsvColor.toColor());
+  }
+  return colors;
 }

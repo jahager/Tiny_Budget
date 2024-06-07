@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               MaterialPageRoute(
                                   builder: (context) => const AddEntryPage()));
                         },
-                        child: const OutlineText("Add Entry")
+                        child: const OutlineText("Add")
                     ),
                     )
                 ),
@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   builder: (context) =>
                                       const ViewEntriesPage()));
                         },
-                        child: const OutlineText("View Entries",)),
+                        child: const OutlineText("View",)),
                   )),
               const Spacer(),
               Expanded(
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   builder: (context) =>
                                       const ViewSummaryPage()));
                         },
-                        child: const OutlineText("View Summary",)),
+                        child: const OutlineText("Summary",)),
                   )),
               const Spacer(),
             ],
