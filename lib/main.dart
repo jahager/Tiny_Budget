@@ -82,60 +82,51 @@ class _MyHomePageState extends State<MyHomePage> {
         // 3 Buttons Add Entry, View Entries, View Summary
         child: Padding(
           padding:
-              const EdgeInsets.only(top: 3, bottom: 20, left: 16, right: 16),
+              const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Spacer(),
               Expanded(
-                flex: 3,
-                child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: OutlinedButton(
-                        style: roundSquareStyle,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AddEntryPage()));
-                        },
-                        child: const OutlineText("Add", fontSize: 68, outlineWidth: 4,)
-                    ),
-                    )
+                flex: 10,
+                child: OutlinedButton(
+                    style: roundSquareStyle,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddEntryPage()));
+                    },
+                    child: const OutlineText("Add", fontSize: 68, outlineWidth: 4,)
+                )
                 ),
               const Spacer(),
               Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: OutlinedButton(
-                        style: roundSquareStyle,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ViewEntriesPage()));
-                        },
-                        child: const OutlineText("View", fontSize: 68, outlineWidth: 4,)),
-                  )),
+                  flex: 10,
+                  child: OutlinedButton(
+                      style: roundSquareStyle,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewEntriesPage()));
+                      },
+                      child: const OutlineText("View", fontSize: 68, outlineWidth: 4,))),
               const Spacer(),
               Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: OutlinedButton(
-                        style: roundSquareStyle,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ViewSummaryPage()));
-                        },
-                        child: const OutlineText("Summary", fontSize: 68, outlineWidth: 4,)),
-                  )),
+                  flex: 10,
+                  child: OutlinedButton(
+                      style: roundSquareStyle,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewSummaryPage()));
+                      },
+                      child: const OutlineText("Summary", fontSize: 68, outlineWidth: 4,))),
               const Spacer(),
             ],
           ),
