@@ -248,16 +248,21 @@ class _AddEntryPageState extends State<AddEntryPage> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(top: 42, bottom: 16),
-                child: OutlinedButton(
-                    style: roundSquareStyle,
-                    onPressed: () {
-                      _submitText();
-                      Navigator.pop(context);
-                    },
-                    child: const OutlineText(
-                      "Submit",
-                    ))),
+                padding: const EdgeInsets.only(top: 16, bottom: 16),
+                child: SizedBox(
+                  height: 120,
+                  child: OutlinedButton(
+                      style: roundSquareStyle,
+                      onPressed: () {
+                        _submitText();
+                        Navigator.pop(context);
+                      },
+                      child: const OutlineText(
+                        "Submit",
+                        fontSize: 68,
+                        outlineWidth: 4,
+                      )),
+                )),
           ],
         ),
       )),
