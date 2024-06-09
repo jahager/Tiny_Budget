@@ -250,7 +250,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 16),
                 child: SizedBox(
-                  height: 120,
+                  height: (MediaQuery.sizeOf(context).height - 600) < 120 ? 120: MediaQuery.sizeOf(context).height - 600,
                   child: OutlinedButton(
                       style: roundSquareStyle,
                       onPressed: () {
