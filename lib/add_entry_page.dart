@@ -68,9 +68,10 @@ class _AddEntryPageState extends State<AddEntryPage> {
       ),
       body: Center(
           child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: ListView(
           children: [
+            SizedBox(height: 16,), // FIXES DATE text cutoff
             TextField(
               decoration: InputDecoration(
                 labelText: "Date",
