@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tiny_budget/entry_chart.dart';
@@ -35,7 +34,6 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
   Future<void> _updateData() async {
     entries = await LocalDatabase.getEntriesByDateRange(
         selectedDateRange.start, selectedDateRange.end);
-    print(entries);
   }
 
   @override
@@ -44,7 +42,9 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
           title: const OutlineText(
-            "Budget Summary", withGradient: true, fontSize: 32,
+            "Budget Summary",
+            withGradient: true,
+            fontSize: 32,
           ),
         ),
         body: Padding(
@@ -85,12 +85,15 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
               height: MediaQuery.of(context).size.height - 170,
               width: double.infinity,
               child: ListView(children: [
-                Center(child: OutlineText("Spending", withGradient: true)),
+                const Center(
+                    child: OutlineText("Spending", withGradient: true)),
                 FutureBuilder<List<Entry>>(
                   future: LocalDatabase.getEntriesByDateRange(
                       selectedDateRange.start, selectedDateRange.end),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasData &&
+                        null != snapshot.data &&
+                        snapshot.data!.isNotEmpty) {
                       return Column(children: [
                         SizedBox(
                           height: 200,
@@ -99,19 +102,24 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                             entries: snapshot.data!,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         CategoryLegend(entries: snapshot.data!)
                       ]);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
+                    } else if (null == snapshot.data ||
+                        snapshot.data!.isEmpty) {
+                      return Center(
+                          child: Text(
+                              "No Budget Entries for ${dateController.text}"));
                     } else {
-                      return CircularProgressIndicator();
+                      return Container();
                     }
                   },
                 ),
-                Center(
+                const Center(
                     child: OutlineText(
                   "Budgets",
                   withGradient: true,
@@ -120,12 +128,15 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                     future: LocalDatabase.getCategories(),
                     builder: (context, categories) {
                       if (categories.hasData) {
-                        List<Widget> graphs =[];
+                        List<Widget> graphs = [];
 
-                        for (String category in categories.data!){
+                        for (String category in categories.data!) {
                           graphs.add(Row(
                             children: [
-                              OutlineText(category, fontSize: 24,),
+                              OutlineText(
+                                category,
+                                fontSize: 24,
+                              ),
                             ],
                           ));
                           graphs.add(FutureBuilder<List<Entry>>(
@@ -138,16 +149,15 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                                     category: category,
                                   );
                                 } else {
-                                  return CircularProgressIndicator();
+                                  return Container();
                                 }
-                              })
-                          );
+                              }));
                         }
                         return Column(
                           children: graphs,
                         );
                       } else {
-                        return CircularProgressIndicator();
+                        return Container();
                       }
                     }),
               ]),
