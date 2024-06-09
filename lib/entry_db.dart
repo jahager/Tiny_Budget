@@ -140,7 +140,6 @@ class LocalDatabase {
     for (Entry entry in entries) {
       categories.add(entry.category);
     }
-    print(categories);
     return categories;
   }
 
