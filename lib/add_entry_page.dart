@@ -18,10 +18,12 @@ class _AddEntryPageState extends State<AddEntryPage> {
   DateTime selectedDate = DateTime.now();
   final dateController = TextEditingController(
       text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
-  final payToController = TextEditingController();
-  final categoryController = TextEditingController();
   final notesController = TextEditingController();
   final amountController = TextEditingController();
+
+  // Controllers are handled by AutocompleteFieldViewBuilder
+  late TextEditingController payToController;
+  late TextEditingController categoryController;
 
   // Default to payment entry
   EntryType? _entryType = EntryType.payment;
@@ -30,22 +32,12 @@ class _AddEntryPageState extends State<AddEntryPage> {
   void dispose() {
     // Clean up the controllers when the widget is disposed.
     dateController.dispose();
-    payToController.dispose();
-    categoryController.dispose();
     notesController.dispose();
     amountController.dispose();
     super.dispose();
   }
 
   Future<void> _submitText() async {
-    print("Date " + dateController.text);
-    print("Paid to " + payToController.text);
-    print("Category " + categoryController.text);
-    print("Notes " + notesController.text);
-    print("Amount " + amountController.text);
-    String payType = _entryType == EntryType.payment ? "payment" : "income";
-    print("Is " + payType);
-
     Entry entry = Entry(
         DateTime.parse(dateController.text),
         payToController.text,
@@ -55,9 +47,6 @@ class _AddEntryPageState extends State<AddEntryPage> {
         _entryType == EntryType.payment);
 
     await LocalDatabase.saveEntries([entry]);
-
-    var entries = await LocalDatabase.recallEntries();
-    print(entries);
   }
 
   final ButtonStyle roundSquareStyle = OutlinedButton.styleFrom(
@@ -72,7 +61,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         title: const OutlineText(
-          "Add Budget/Pay", withGradient: true, fontSize: 32,
+          "Add Budget/Pay",
+          withGradient: true,
+          fontSize: 32,
         ),
       ),
       body: Center(
@@ -108,14 +99,49 @@ class _AddEntryPageState extends State<AddEntryPage> {
             const SizedBox(
               height: spaceBetweenInput,
             ),
-            TextField(
-              controller: payToController,
-              decoration: InputDecoration(
-                labelText: "Paid To",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-              ),
+            FutureBuilder<Set<String>>(
+              future: LocalDatabase.getCategories(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Autocomplete<String>(
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onSubmitted) {
+                        payToController = controller;
+                        return TextField(
+                          controller: payToController,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(
+                            labelText: "Paid To",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        );
+                      },
+                      onSelected: (String selection) {},
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text == "") {
+                          return const Iterable<String>.empty();
+                        }
+                        return snapshot.data!.toList().where((String option) {
+                          return option
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase());
+                        });
+                      });
+                } else {
+                  payToController = TextEditingController();
+                  return TextField(
+                    controller: payToController,
+                    decoration: InputDecoration(
+                      labelText: "Category",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(
               height: spaceBetweenInput,
@@ -124,16 +150,34 @@ class _AddEntryPageState extends State<AddEntryPage> {
               future: LocalDatabase.getCategories(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return TextField(
-                    controller: categoryController,
-                    decoration: InputDecoration(
-                      labelText: "Category",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                  );
+                  return Autocomplete<String>(
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onSubmitted) {
+                        categoryController = controller;
+                        return TextField(
+                          controller: categoryController,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(
+                            labelText: "Category",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        );
+                      },
+                      onSelected: (String selection) {},
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text == "") {
+                          return const Iterable<String>.empty();
+                        }
+                        return snapshot.data!.toList().where((String option) {
+                          return option
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase());
+                        });
+                      });
                 } else {
+                  categoryController = TextEditingController();
                   return TextField(
                     controller: categoryController,
                     decoration: InputDecoration(
@@ -163,7 +207,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
             ),
             TextField(
               controller: amountController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
+              keyboardType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
               inputFormatters: [DollarTextInputFormatter()],
               decoration: InputDecoration(
                 labelText: "\$ Amount",
@@ -210,8 +255,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
                       _submitText();
                       Navigator.pop(context);
                     },
-                    child:
-                        const OutlineText("Submit", ))),
+                    child: const OutlineText(
+                      "Submit",
+                    ))),
           ],
         ),
       )),
