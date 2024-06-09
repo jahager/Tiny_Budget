@@ -134,7 +134,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
                   return TextField(
                     controller: payToController,
                     decoration: InputDecoration(
-                      labelText: "Category",
+                      labelText: "Paid To",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
