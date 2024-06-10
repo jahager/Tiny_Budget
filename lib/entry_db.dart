@@ -133,24 +133,23 @@ class LocalDatabase {
   }
 
   // Get set of Categories
-  static Future<Set<String>> getCategories() async{
-    List<Entry> entries = await recallEntries();
+  static Future<List<String>> getCategories() async{
+    // Get the database
+    Database database = await initializeDatabase();
 
-    Set<String> categories = {};
-    for (Entry entry in entries) {
-      categories.add(entry.category);
-    }
-    return categories;
+    final String sql = 'SELECT DISTINCT category FROM entries';
+    final List<Map<String, dynamic>> maps = await database.rawQuery(sql);
+    return maps.map((map) => map['category'] as String).toList();
   }
 
-  static Future<Set<String>> getPaidTo() async{
-    List<Entry> entries = await recallEntries();
+  // Get Paid To list of names
+  static Future<List<String>> getPaidTo() async{
+    // Get the database
+    Database database = await initializeDatabase();
 
-    Set<String> categories = {};
-    for (Entry entry in entries) {
-      categories.add(entry.paidTo);
-    }
-    return categories;
+    final String sql = 'SELECT DISTINCT paidTo FROM entries';
+    final List<Map<String, dynamic>> maps = await database.rawQuery(sql);
+    return maps.map((map) => map['paidTo'] as String).toList();
   }
 
   static Future<List<Entry>> getEntriesByDateRange(

@@ -124,7 +124,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                   "Budgets",
                   withGradient: true,
                 )),
-                FutureBuilder<Set<String>>(
+                FutureBuilder<List<String>>(
                     future: LocalDatabase.getCategories(),
                     builder: (context, categories) {
                       if (categories.hasData) {

@@ -100,8 +100,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
             const SizedBox(
               height: spaceBetweenInput,
             ),
-            FutureBuilder<Set<String>>(
-              future: LocalDatabase.getCategories(),
+            FutureBuilder<List<String>>(
+              future: LocalDatabase.getPaidTo(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Autocomplete<String>(
@@ -147,7 +147,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             const SizedBox(
               height: spaceBetweenInput,
             ),
-            FutureBuilder<Set<String>>(
+            FutureBuilder<List<String>>(
               future: LocalDatabase.getCategories(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
