@@ -87,7 +87,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                 borderRadius: BorderRadius.circular(16.0),
               ),
               width: double.infinity,
-              height: MediaQuery.of(context).size.height - 200,
+              height: MediaQuery.of(context).size.height - 205,
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   return Container(

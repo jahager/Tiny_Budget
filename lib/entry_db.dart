@@ -172,6 +172,26 @@ class LocalDatabase {
     return entryList;
   }
 
+  static Future<List<Entry>> getSpendingByDateRange(
+      DateTime startDate, DateTime endDate) async {
+    // Get the database
+    Database database = await initializeDatabase();
+
+    // Query the database for entries within the date range
+    List<Map<String, dynamic>> entries = await database.query(
+      entriesTable,
+      where: 'date >= ? AND date <= ? AND type == 1',
+      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String()],
+    );
+
+    // Convert the entries to Entry objects
+    List<Entry> entryList =
+    entries.map((entry) => Entry.fromJson(entry)).toList();
+
+    // Return the list of entries
+    return entryList;
+  }
+
   static Future<void> deleteEntry(Entry entry) async {
     final db = await initializeDatabase();
     await db.delete(

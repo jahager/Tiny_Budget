@@ -82,13 +82,13 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height - 170,
+              height: MediaQuery.of(context).size.height - 195,
               width: double.infinity,
               child: ListView(children: [
                 const Center(
                     child: OutlineText("Spending", withGradient: true)),
                 FutureBuilder<List<Entry>>(
-                  future: LocalDatabase.getEntriesByDateRange(
+                  future: LocalDatabase.getSpendingByDateRange(
                       selectedDateRange.start, selectedDateRange.end),
                   builder: (context, snapshot) {
                     if (snapshot.hasData &&
@@ -113,7 +113,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                         snapshot.data!.isEmpty) {
                       return Center(
                           child: Text(
-                              "No Budget Entries for ${dateController.text}"));
+                              "No Spending Entries for ${dateController.text}"));
                     } else {
                       return Container();
                     }
