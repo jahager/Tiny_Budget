@@ -11,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16))));
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,8 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Theme.of(context).colorScheme.primary,
               Theme.of(context).colorScheme.inversePrimary,
             ]).createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
+              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+            ),
             child: Text(
               widget.title,
               style: TextStyle(
@@ -79,26 +77,30 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // 3 Buttons Add Entry, View Entries, View Summary
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Spacer(),
               Expanded(
-                flex: 10,
-                child: OutlinedButton(
-                    style: roundSquareStyle,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddEntryPage()));
-                    },
-                    child: const OutlineText("Add", fontSize: 68, outlineWidth: 4,)
-                )
-                ),
+                  flex: 10,
+                  child: OutlinedButton(
+                      style: roundSquareStyle,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddEntryPage()));
+                      },
+                      child: const FittedBox(
+                        fit: BoxFit.fill,
+                        child: OutlineText(
+                          "Add",
+                          fontSize: 68,
+                          outlineWidth: 4,
+                        ),
+                      ))),
               const Spacer(),
               Expanded(
                   flex: 10,
@@ -108,10 +110,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const ViewEntriesPage()));
+                                builder: (context) => const ViewEntriesPage()));
                       },
-                      child: const OutlineText("View", fontSize: 68, outlineWidth: 4,))),
+                      child: const FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: OutlineText(
+                          "View",
+                          fontSize: 68,
+                          outlineWidth: 4,
+                        ),
+                      ))),
               const Spacer(),
               Expanded(
                   flex: 10,
@@ -121,10 +129,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const ViewSummaryPage()));
+                                builder: (context) => const ViewSummaryPage()));
                       },
-                      child: const OutlineText("Summary", fontSize: 68, outlineWidth: 4,))),
+                      child: const FittedBox(
+                          fit: BoxFit.fill,
+                          child: OutlineText(
+                            "Summary",
+                            fontSize: 68,
+                            outlineWidth: 4,
+                          )))),
               const Spacer(),
             ],
           ),

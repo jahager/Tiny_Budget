@@ -77,6 +77,7 @@ class RoundBoxContainer extends StatelessWidget {
   }
 }
 
+// Prevents weird amount/dollar inputs
 class DollarTextInputFormatter extends TextInputFormatter {
   final int decimalRange;
 

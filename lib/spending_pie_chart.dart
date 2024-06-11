@@ -19,7 +19,8 @@ class SpendingPieChart extends StatelessWidget {
       }
 
       if (entry.type) {
-        categoryAmounts[entry.category] = entry.amount + categoryAmounts[entry.category]!;
+        categoryAmounts[entry.category] =
+            entry.amount + categoryAmounts[entry.category]!;
       }
     }
 
@@ -39,7 +40,8 @@ class SpendingPieChart extends StatelessWidget {
             title:
                 "${(categoryAmounts[category]! / totalSpend * 100).toInt()}% ${category.toString()}",
             titlePositionPercentageOffset: 0.75,
-            titleStyle: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+            titleStyle: const TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
             showTitle: true),
       );
     }
@@ -61,11 +63,18 @@ class CategoryLegend extends StatelessWidget {
   Row _buildRow(String key, double value, Color color) {
     return Row(
       children: [
-        OutlineText(
-          key,
-          fontSize: 32,
-          color: [color],
-          outlineWidth: 2.5,
+        Expanded(
+          flex: 40,
+          child: FittedBox(
+            alignment: Alignment.bottomLeft,
+            fit: BoxFit.scaleDown,
+            child: OutlineText(
+              key,
+              fontSize: 32,
+              color: [color],
+              outlineWidth: 2.5,
+            ),
+          ),
         ),
         const Spacer(),
         OutlineText("\$ ${value.toStringAsFixed(2)}",
@@ -85,7 +94,8 @@ class CategoryLegend extends StatelessWidget {
       }
 
       if (entry.type) {
-        categoryAmounts[entry.category] = entry.amount + categoryAmounts[entry.category]!;
+        categoryAmounts[entry.category] =
+            entry.amount + categoryAmounts[entry.category]!;
       }
     }
 

@@ -133,9 +133,15 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                         for (String category in categories.data!) {
                           graphs.add(Row(
                             children: [
-                              OutlineText(
-                                category,
-                                fontSize: 24,
+                              Expanded(
+                                child: FittedBox(
+                                  alignment: Alignment.bottomLeft,
+                                  fit: BoxFit.scaleDown,
+                                  child: OutlineText(
+                                    category,
+                                    fontSize: 24,
+                                  ),
+                                ),
                               ),
                             ],
                           ));
