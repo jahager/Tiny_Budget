@@ -29,7 +29,7 @@ class Entry {
 
   @override
   String toString() {
-    return "${DateFormat('yyyy-MM-dd').format(date)}, To:$paidTo, Cat:$category, \$$amount";
+    return "${DateFormat('yyyy-MM-dd').format(date)}, To:$paidTo, Category:$category, Type:${getType()} \$$amount";
   }
 
   factory Entry.fromJson(Map<String, dynamic> json) {

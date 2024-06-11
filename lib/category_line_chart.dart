@@ -4,17 +4,17 @@ import 'package:intl/intl.dart';
 
 import 'entry_db.dart';
 
-class LineChartCatEntries extends StatefulWidget {
+class CategoryLineChart extends StatefulWidget {
   final List<Entry> entries;
   final DateTimeRange dateRange;
   final String category;
-  const LineChartCatEntries({super.key, required this.entries, required this.dateRange, required this.category});
+  const CategoryLineChart({super.key, required this.entries, required this.dateRange, required this.category});
 
   @override
-  State<LineChartCatEntries> createState() => _LineChartCatEntriesState();
+  State<CategoryLineChart> createState() => _CategoryLineChartState();
 }
 
-class _LineChartCatEntriesState extends State<LineChartCatEntries> {
+class _CategoryLineChartState extends State<CategoryLineChart> {
   late List<Entry> entries;
   late DateTimeRange dateRange;
   late String category;
@@ -33,9 +33,11 @@ class _LineChartCatEntriesState extends State<LineChartCatEntries> {
     category = widget.category;
     // Guarantee correct category
     entries = entries.where((item) => item.category == category).toList();
-    entries.sort((a, b) => b.date.compareTo(a.date));
+    // Sort by date
+    entries.sort((a, b) => a.date.compareTo(b.date));
     minX = entries[0].getDateAsInt().toDouble();
 
+    // Subtract payments and add Budget income
     if (entries[0].type){
       entries[0].amount *= -1;
     }
@@ -45,6 +47,8 @@ class _LineChartCatEntriesState extends State<LineChartCatEntries> {
       }
       entries[i].amount += entries[i-1].amount;
     }
+
+    // Set graph extents
     for (Entry entry in entries) {
       double date = entry.getDateAsInt().toDouble();
       double amount = entry.amount;

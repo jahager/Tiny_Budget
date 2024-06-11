@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tiny_budget/entry_chart.dart';
+import 'package:tiny_budget/spending_pie_chart.dart';
 
 import 'budget_theme.dart';
 import 'entry_db.dart';
-import 'line_chart.dart';
+import 'category_line_chart.dart';
 
 class ViewSummaryPage extends StatefulWidget {
   const ViewSummaryPage({super.key});
@@ -98,7 +98,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                         SizedBox(
                           height: 200,
                           width: 200,
-                          child: PieChartByCategory(
+                          child: SpendingPieChart(
                             entries: snapshot.data!,
                           ),
                         ),
@@ -143,7 +143,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                               future: LocalDatabase.recallEntries(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return LineChartCatEntries(
+                                  return CategoryLineChart(
                                     entries: snapshot.data!,
                                     dateRange: selectedDateRange,
                                     category: category,

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'budget_theme.dart';
 import 'entry_db.dart';
 
-class PieChartByCategory extends StatelessWidget {
+class SpendingPieChart extends StatelessWidget {
   final List<Entry> entries;
 
-  const PieChartByCategory({super.key, required this.entries});
+  const SpendingPieChart({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,7 @@ class PieChartByCategory extends StatelessWidget {
       }
 
       if (entry.type) {
-        categoryAmounts[entry.category] =
-            sum(entry.amount, categoryAmounts[entry.category]);
+        categoryAmounts[entry.category] = entry.amount + categoryAmounts[entry.category]!;
       }
     }
 
@@ -40,7 +39,7 @@ class PieChartByCategory extends StatelessWidget {
             title:
                 "${(categoryAmounts[category]! / totalSpend * 100).toInt()}% ${category.toString()}",
             titlePositionPercentageOffset: 0.75,
-            titleStyle: const TextStyle(color: Colors.black, fontSize: 16),
+            titleStyle: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
             showTitle: true),
       );
     }
@@ -86,8 +85,7 @@ class CategoryLegend extends StatelessWidget {
       }
 
       if (entry.type) {
-        categoryAmounts[entry.category] =
-            sum(entry.amount, categoryAmounts[entry.category]);
+        categoryAmounts[entry.category] = entry.amount + categoryAmounts[entry.category]!;
       }
     }
 
@@ -105,10 +103,6 @@ class CategoryLegend extends StatelessWidget {
       ),
     );
   }
-}
-
-double sum(a, b) {
-  return a + b;
 }
 
 List<Color> getComplementaryColors(Color color, int count) {
