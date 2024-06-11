@@ -130,6 +130,8 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                       if (categories.hasData) {
                         List<Widget> graphs = [];
 
+                        List<Color> colors = getComplementaryColors(Theme.of(context).colorScheme.primary, categories.data!.length);
+
                         for (String category in categories.data!) {
                           graphs.add(Row(
                             children: [
@@ -140,6 +142,7 @@ class _ViewSummaryPageState extends State<ViewSummaryPage> {
                                   child: OutlineText(
                                     category,
                                     fontSize: 24,
+                                    color: [colors[categories.data!.indexOf(category)]],
                                   ),
                                 ),
                               ),
