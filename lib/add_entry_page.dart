@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -71,7 +70,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: ListView(
           children: [
-            SizedBox(height: 16,), // FIXES DATE text cutoff
+            const SizedBox(height: 16,), // FIXES DATE text cutoff
             TextField(
               decoration: InputDecoration(
                 labelText: "Date",
@@ -209,7 +208,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             TextField(
               controller: amountController,
               keyboardType:
-                  TextInputType.numberWithOptions(decimal: true, signed: false),
+                  const TextInputType.numberWithOptions(decimal: true, signed: false),
               inputFormatters: [DollarTextInputFormatter()],
               decoration: InputDecoration(
                 labelText: "\$ Amount",
@@ -251,7 +250,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
             Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 16),
                 child: SizedBox(
-                  height: (MediaQuery.sizeOf(context).height - 600) < 120 ? 120: MediaQuery.sizeOf(context).height - 600,
+                  height: (MediaQuery.sizeOf(context).height - 624) < 120 ? 120: MediaQuery.sizeOf(context).height - 624,
                   child: OutlinedButton(
                       style: roundSquareStyle,
                       onPressed: () {

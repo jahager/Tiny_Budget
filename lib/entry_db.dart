@@ -16,7 +16,7 @@ class Entry {
       [this.id = 0]);
 
   String getDate() {
-    return DateFormat('yyyy-MM-dd').format(this.date).toString();
+    return DateFormat('yyyy-MM-dd').format(date).toString();
   }
 
   int getDateAsInt() {
@@ -24,12 +24,12 @@ class Entry {
   }
 
   String getType() {
-    return this.type ? "Payment" : "Budget";
+    return type ? "Payment" : "Budget";
   }
 
   @override
   String toString() {
-    return "${DateFormat('yyyy-MM-dd').format(this.date)}, To:${this.paidTo}, Cat:${this.category}, \$${this.amount}";
+    return "${DateFormat('yyyy-MM-dd').format(date)}, To:$paidTo, Cat:$category, \$$amount";
   }
 
   factory Entry.fromJson(Map<String, dynamic> json) {
@@ -137,7 +137,7 @@ class LocalDatabase {
     // Get the database
     Database database = await initializeDatabase();
 
-    final String sql = 'SELECT DISTINCT category FROM entries';
+    const String sql = 'SELECT DISTINCT category FROM entries';
     final List<Map<String, dynamic>> maps = await database.rawQuery(sql);
     return maps.map((map) => map['category'] as String).toList();
   }
@@ -147,7 +147,7 @@ class LocalDatabase {
     // Get the database
     Database database = await initializeDatabase();
 
-    final String sql = 'SELECT DISTINCT paidTo FROM entries';
+    const String sql = 'SELECT DISTINCT paidTo FROM entries';
     final List<Map<String, dynamic>> maps = await database.rawQuery(sql);
     return maps.map((map) => map['paidTo'] as String).toList();
   }

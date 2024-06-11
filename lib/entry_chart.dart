@@ -7,7 +7,7 @@ import 'entry_db.dart';
 class PieChartByCategory extends StatelessWidget {
   final List<Entry> entries;
 
-  const PieChartByCategory({Key? key, required this.entries}) : super(key: key);
+  const PieChartByCategory({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class PieChartByCategory extends StatelessWidget {
 class CategoryLegend extends StatelessWidget {
   final List<Entry> entries;
 
-  const CategoryLegend({Key? key, required this.entries}) : super(key: key);
+  const CategoryLegend({super.key, required this.entries});
   Row _buildRow(String key, double value, Color color) {
     return Row(
       children: [
@@ -68,7 +68,7 @@ class CategoryLegend extends StatelessWidget {
           color: [color],
           outlineWidth: 2.5,
         ),
-        Spacer(),
+        const Spacer(),
         OutlineText("\$ ${value.toStringAsFixed(2)}",
             fontSize: 32,
             color: [color],
@@ -91,19 +91,17 @@ class CategoryLegend extends StatelessWidget {
       }
     }
 
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: categoryAmounts.entries
-              .map((entry) => _buildRow(
-                  entry.key,
-                  entry.value,
-                  getComplementaryColors(Theme.of(context).colorScheme.primary,
-                          categoryAmounts.length)[
-                      categoryAmounts.keys.toList().indexOf(entry.key)]))
-              .toList(),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: categoryAmounts.entries
+            .map((entry) => _buildRow(
+                entry.key,
+                entry.value,
+                getComplementaryColors(Theme.of(context).colorScheme.primary,
+                        categoryAmounts.length)[
+                    categoryAmounts.keys.toList().indexOf(entry.key)]))
+            .toList(),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -65,19 +63,16 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
                     lastDate: DateTime(2100),
                   );
                   if (pickedDate != null) {
-                    print(pickedDate);
                     setState(() {
                       selectedDateRange = pickedDate;
                       dateController.text =
-                          DateFormat('MM/dd/yyyy').format(pickedDate.start) +
-                              ' - ' +
-                              DateFormat('MM/dd/yyyy').format(pickedDate.end);
+                          '${DateFormat('MM/dd/yyyy').format(pickedDate.start)} - ${DateFormat('MM/dd/yyyy').format(pickedDate.end)}';
                     });
                   }
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Container(
@@ -90,7 +85,7 @@ class _ViewEntriesPageState extends State<ViewEntriesPage> {
               height: MediaQuery.of(context).size.height - 205,
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return Container(
+                  return SizedBox(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height - 200,
                     child: FutureBuilder<List<Entry>>(

@@ -8,7 +8,7 @@ class LineChartCatEntries extends StatefulWidget {
   final List<Entry> entries;
   final DateTimeRange dateRange;
   final String category;
-  const LineChartCatEntries({Key? key, required this.entries, required this.dateRange, required this.category}) : super(key: key);
+  const LineChartCatEntries({super.key, required this.entries, required this.dateRange, required this.category});
 
   @override
   State<LineChartCatEntries> createState() => _LineChartCatEntriesState();
@@ -178,8 +178,8 @@ class _LineChartCatEntriesState extends State<LineChartCatEntries> {
     if (meta.min == meta.max || (value != meta.min && value != meta.max)) {
       return SideTitleWidget(
         axisSide: meta.axisSide,
-        child: text,
         angle: 0.5,
+        child: text,
       );
     } else {
       return Container();

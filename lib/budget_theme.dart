@@ -7,7 +7,7 @@ final ButtonStyle roundSquareStyle = OutlinedButton.styleFrom(
         borderRadius: BorderRadius.all(Radius.circular(16))));
 
 class OutlineText extends StatelessWidget {
-  const OutlineText(this.text, {this.fontSize = 42, this.outlineWidth = 4, this.withGradient = false, this.color = const [] });
+  const OutlineText(this.text, {super.key, this.fontSize = 42, this.outlineWidth = 4, this.withGradient = false, this.color = const [] });
   final String text;
   final double outlineWidth;
   final double fontSize;
