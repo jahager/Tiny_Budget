@@ -4,6 +4,8 @@ import 'package:tiny_budget/budget_theme.dart';
 import 'package:tiny_budget/view_entries_page.dart';
 import 'package:tiny_budget/view_summary_page.dart';
 
+import 'about_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -43,12 +45,32 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         title: Center(
-            child: OutlineText(
-          widget.title,
-          fontSize: 48,
-          outlineWidth: 6,
-          withGradient: true,
-        )),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [Center(
+                child: OutlineText(
+                          widget.title,
+                          fontSize: 48,
+                          outlineWidth: 6,
+                          withGradient: true,
+                        ),
+              ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AboutPage()));
+                      },
+                          child: Container(height: 150,),),
+                    ),
+                  ],
+                )
+
+              ]
+            )),
       ),
       body: Center(
         // 3 Buttons Add Entry, View Entries, View Summary
