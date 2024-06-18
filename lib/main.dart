@@ -43,36 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         title: Center(
-            child: Stack(children: [
-          Text(
-            widget.title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 48,
-              foreground: Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 6
-                ..color = Colors.black,
-            ),
-          ),
-          ShaderMask(
-            blendMode: BlendMode.srcIn,
-            shaderCallback: (bounds) => LinearGradient(colors: [
-              Theme.of(context).colorScheme.primary,
-              Theme.of(context).colorScheme.inversePrimary,
-            ]).createShader(
-              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-            ),
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 48,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ),
-        ])),
+            child: OutlineText(
+          widget.title,
+          fontSize: 48,
+          outlineWidth: 6,
+          withGradient: true,
+        )),
       ),
       body: Center(
         // 3 Buttons Add Entry, View Entries, View Summary
